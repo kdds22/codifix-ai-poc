@@ -1,11 +1,16 @@
 import os
+import shutil
+from git import Repo
+from pathlib import Path
+
 from dotenv import load_dotenv
 load_dotenv()
 
-from pathlib import Path
-from git import Repo
-import get_stack_trace
-import shutil
+from . import get_stack_trace
+
+GIT_AZURE_TOKEN = os.environ.get("GIT_AZURE_TOKEN")
+GIT_AZURE_SQUAD = os.environ.get("GIT_AZURE_SQUAD")
+GIT_AZURE_REPO = os.environ.get("GIT_AZURE_REPO")
 
 def search_and_copy_files(repo_dir, filenames, destination_dir):
     found_files = set()
@@ -21,7 +26,7 @@ def search_and_copy_files(repo_dir, filenames, destination_dir):
     
 
 def repo_downloader(repo_dir, error_folder_directory, destinarion_dir):
-    repo_url = f"https://{os.environ.get("GIT_AZURE_TOKEN")}@dev.azure.com/HavanLabs/{os.environ.get("GIT_AZURE_SQUAD")}/_git/{os.environ.get("GIT_AZURE_REPO")}"
+    repo_url = f"https://{GIT_AZURE_TOKEN}@dev.azure.com/HavanLabs/{GIT_AZURE_SQUAD}/_git/{GIT_AZURE_REPO}"
     if not os.path.exists(repo_dir) or not os.listdir(repo_dir):
         repo = Repo.clone_from(repo_url, repo_dir)
     else:

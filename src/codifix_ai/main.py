@@ -16,8 +16,8 @@ directory_read_tool_kotlin = DirectoryReadTool(directory='running-crew/kotlin-fi
 file_read_tool = FileReadTool()
 
 
-import models.custom_models as cm
-import tools.custom_tools as ct
+from .models import custom_models  as cm
+from .tools import custom_tools as ct
 
 
 
@@ -25,8 +25,8 @@ import tools.custom_tools as ct
  # 0 = OFF, 1 = DEBUG, 2 = INFO
 verbose_type = 1 #TODO - extrair .env
 
-from tasks import FirebaseErrorTasks
-from agents import FirebaseErrorAgents
+from .tasks import FirebaseErrorTasks
+from .agents import FirebaseErrorAgents
 
 tasks = FirebaseErrorTasks()
 agents = FirebaseErrorAgents()
@@ -188,8 +188,7 @@ def kickoff_builded_crew_qa(query_solution, repository_solution, dev_solution):
 	qa_solution = crew.kickoff()
 	return qa_solution
 
-if __name__ == '__main__':
-
+def codifixCrew():
 	repo_dir = "current_repo_temp"
 	directory_path = 'running-crew/erros'
 	error_directory = Path(directory_path)
@@ -215,12 +214,20 @@ if __name__ == '__main__':
 	print('\n\n\n---------------------\n\n\n')
 	print('... Etapa 6 ...\n')
 	qa_crew_step = kickoff_builded_crew_qa(query_solution=crew_research_step, repository_solution=crew_repo_step, dev_solution=crew_dev_step)
-
+	print(qa_crew_step)
 	print('\n\n\n---------------------\n')
 	print('\n---------------------\n')
 	print('Aplicação concluída...\n')
-  
-	pass
 
 
 
+def run():
+    codifixCrew()
+    
+if __name__ == '__main__':
+	codifixCrew()
+ 
+ 
+ 
+ 
+ 

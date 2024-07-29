@@ -1,10 +1,10 @@
 
-import models.custom_models as cm
+from ..models import custom_models as cm
 from crewai_tools import BaseTool
 
-import bigquery_script
-import repo_downloader
-import webhook
+from .. import bigquery_script
+from .. import repo_downloader
+from .. import webhook
 
 
 class BigQueryResearchTool(BaseTool):

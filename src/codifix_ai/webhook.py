@@ -4,7 +4,7 @@ import requests
 
 webhook_url = os.environ.get("WEBHOOK_URL")
 
-import models.custom_models as cm
+from .models import custom_models as cm
 
 def send_teams(webhook_url:str = webhook_url, content:str='', title:str='', color:str="000000") -> int:
     """

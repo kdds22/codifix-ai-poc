@@ -1,5 +1,5 @@
 
-import big_queries
+from . import big_queries
 from dotenv import load_dotenv
 load_dotenv()
 
