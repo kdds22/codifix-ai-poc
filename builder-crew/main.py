@@ -1,0 +1,329 @@
+
+import bigquery_script
+import repo_downloader
+import extrator_funcao
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
+
+import webhook
+from typing import List
+
+from crewai import Crew
+from crewai_tools import DirectoryReadTool, \
+                         FileReadTool
+
+directory_read_tool = DirectoryReadTool(directory='builder-crew/erros')
+directory_read_tool_kotlin = DirectoryReadTool(directory='builder-crew/kotlin-files')
+file_read_tool = FileReadTool()
+
+from crewai_tools import BaseTool
+
+from pydantic import BaseModel
+
+class BigQueryError(BaseModel):
+	title: str
+	file: str
+	line: int
+	function: str
+	description: str
+	stack_trace: str
+
+class GitFileError(BaseModel):
+	full_kotlin_code: str
+
+class BigQueryResearchTool(BaseTool):
+    name: str ="Google BigQuery Research Tool"
+    description: str = ("Getting the error data of bigquery "
+         "to identify possible error causes.")
+    
+    def _run(self, text: str) -> str:
+        return bigquery_script.start_bigquery('builder-crew/erros')
+
+
+class GitSearchTool(BaseTool):
+	name: str="Git Helper Tool"
+	description: str = ("Getting the project files repository to "
+					 "to analyze the reported errors.")
+	
+	def _run(self, text: str) -> str:
+		return repo_downloader.start_repo_downloader("current_repo_temp",'builder-crew/erros',"builder-crew/kotlin-files")
+
+class SectionModel(BaseModel):
+	activityTitle: str
+	activitySubtitle: str
+
+class WebhookModel(BaseModel):
+	themeColor: str
+	summary: str
+	sections: List[SectionModel]
+
+class WebhookTool(BaseTool):
+    name: str ="Webhook Tool"
+    description: str = ("Sending a webhook to a specified channel "
+         "to notify about the error.")
+    
+    def _run(self, text: str) -> str:
+        webhook_model = WebhookModel(
+            themeColor="#0078D7",
+            summary="CodiFix - Sugestão ",
+            sections=[
+                SectionModel(
+                    activityTitle="Mensagem de Erro",
+                    activitySubtitle="CodiFix webhook XPTO",
+                ),
+            ],
+        )
+        return webhook.send_teams_by_model(webhook_model)
+
+
+ # 0 = OFF, 1 = DEBUG, 2 = INFO
+verbose_type = 1
+
+from tasks import FirebaseErrorTasks
+from agents import FirebaseErrorAgents
+
+tasks = FirebaseErrorTasks()
+agents = FirebaseErrorAgents()
+
+bigquery_research_tool = BigQueryResearchTool()
+git_search_tool = GitSearchTool()
+webhhok_tool = WebhookTool()
+
+# Define Agents
+senior_research_agent = agents.senior_research_agent()
+git_manager_agent = agents.git_master_agent()
+senior_analyst_identifier_agent = agents.senior_analyst_identifier_agent() 
+senior_analyst_suggester_agent = agents.senior_analyst_suggester_agent()
+senior_engineer_agent = agents.senior_engineer_agent()
+qa_engineer_agent = agents.qa_engineer_agent()
+chief_qa_engineer_agent = agents.chief_qa_engineer_agent()
+webhhok_agent = agents.microsoft_teams_agent()
+
+# Define Tasks
+research_solution = tasks.research_task(
+										agent=senior_research_agent, 
+										json_model=BigQueryError, 
+										tools_list=[directory_read_tool, file_read_tool, bigquery_research_tool]
+										)
+
+def suggest_solution(stack_trace, original_code): 
+	return tasks.suggest_task(agent=senior_analyst_suggester_agent,stack_trace=stack_trace, original_code=original_code)
+
+def code_solution(stack_trace, suggest, original_code): 
+	return tasks.code_task(agent=senior_engineer_agent, stack_trace=stack_trace, suggest=suggest, original_code=original_code)
+
+def review_solution(original_code, suggested_code, stack_trace): 
+	return tasks.review_task(agent=qa_engineer_agent, stack_trace=stack_trace, original_code=original_code, suggested_code=suggested_code)
+
+def approve_solution(stack_trace, suggested_code): 
+	return tasks.evaluate_task(agent=chief_qa_engineer_agent, stack_trace=stack_trace, suggested_code=suggested_code)
+
+def send_notification(notification_message):
+	return tasks.microsoft_teams_task(agent=webhhok_agent, json_model=WebhookModel, message=notification_message, webhook_tool=[webhhok_tool])
+
+
+# review_solution.context = [suggest_solution, code_solution]
+# approve_solution.context = [suggest_solution, code_solution, review_solution]
+
+def print_results(solution):
+	print("\n\n##########################")
+	print("## Resultado da Solução ##")
+	print("##########################\n")
+	print(solution)
+
+# Create Crew responsible for Copy
+def kickoff_builded_research_crew():
+
+	crew = Crew(
+		agents=[
+			senior_research_agent
+		],
+		tasks=[
+			research_solution
+		],
+		verbose=verbose_type
+	)
+
+	researched_solution = crew.kickoff()
+	# print_results(solution=researched_solution)
+	return researched_solution
+
+def kickoff_builded_crew_repo(researcher_notes):
+	getting_files_solution = tasks.git_crawler_task(
+													agent=git_manager_agent, 
+													json_model=GitFileError, 
+													researcher_notes=researcher_notes, 
+													tools_list=[git_search_tool]
+													)
+	
+	crawler_files_solution = tasks.git_crawler_task(
+													agent=git_manager_agent, 
+													json_model=GitFileError, 
+													researcher_notes=researcher_notes, 
+													tools_list=[directory_read_tool_kotlin, file_read_tool]
+													)
+	
+	crew_repo = Crew(
+		agents=[
+			git_manager_agent,
+			git_manager_agent,
+		],
+		tasks=[
+			getting_files_solution,
+			crawler_files_solution
+		],
+		verbose=verbose_type
+	)
+
+	repo_solution = crew_repo.kickoff()
+	# print_results(solution=repo_solution)
+	return repo_solution
+
+def kickoff_builded_crew_identify(stack_trace, full_code):
+	# identify_solution = tasks.identify_task(senior_analyst_identifier_agent, previous_solution)
+	suggest_solution_identified = tasks.suggest_task(senior_analyst_suggester_agent, stack_trace, full_code)
+	crew_identify_suggest = Crew(
+		agents=[
+			# senior_analyst_identifier_agent,
+			senior_analyst_suggester_agent,
+		],
+		tasks=[
+			# identify_solution,
+			suggest_solution_identified,			
+		],
+		verbose=verbose_type
+	)
+
+	suggest_identified_solution = crew_identify_suggest.kickoff()
+	# print_results(solution=suggest_identified_solution)
+	return suggest_identified_solution
+
+def kickoff_builded_crew_suggest(query_solution, repository_solution):
+
+	identify_solution = tasks.identify_task(senior_analyst_identifier_agent, query_solution)
+
+
+	crew = Crew(
+		agents=[
+			senior_analyst_identifier_agent,
+			senior_analyst_suggester_agent
+		],
+		tasks=[
+			identify_solution,
+			suggest_solution(stack_trace=query_solution, original_code=repository_solution)
+		],
+		verbose=verbose_type
+	)
+
+	suggestion_solution = crew.kickoff()
+	# print_results(solution=suggestion_solution)
+	return suggestion_solution
+
+def kickoff_builded_crew_dev(stack_trace, suggest_solution, repository_solution):
+
+	crew = Crew(
+		agents=[
+			senior_engineer_agent
+		],
+		tasks=[
+			code_solution(stack_trace=stack_trace,suggest=suggest_solution,original_code=repository_solution)
+		],
+		verbose=verbose_type
+	)
+
+	dev_solution = crew.kickoff()
+	# print_results(solution=dev_solution)
+	return dev_solution
+
+def kickoff_builded_crew_qa(query_solution, repository_solution, dev_solution):
+
+	crew = Crew(
+		agents=[
+			qa_engineer_agent,
+			# chief_qa_engineer_agent,
+			# webhhok_agent
+		],
+		tasks=[
+			review_solution(original_code=repository_solution, suggested_code=dev_solution, stack_trace=query_solution),
+			# approve_solution(stack_trace=query_solution, suggested_code=dev_solution),
+			# send_notification(notification_message=f"O erro {query_solution} foi analisado!")
+		],
+		verbose=verbose_type
+	)
+
+	qa_solution = crew.kickoff()
+	# print_results(solution=qa_solution)
+	return qa_solution
+
+def iniciar_agentes(erro):
+	print(erro)
+	for key in erro:
+		print(erro[key])
+	pass
+
+if __name__ == '__main__':
+
+	repo_dir = "current_repo_temp"
+	directory_path = 'builder-crew/erros'
+	error_directory = Path(directory_path)
+	destinarion_dir = "builder-crew/kotlin-files"
+	file_path = Path(destinarion_dir)
+
+	# print('\n---------------------\n')
+	print('Iniciando aplicação...\n')
+
+	# print('\n---------------------\n')
+	# print('... Etapa 1 ...\n')
+	# bigquery_script.start_bigquery(directory_path=directory_path)
+	
+	# print('\n---------------------\n')
+	# print('... Etapa 2 ...\n')
+	# repo_downloader.start_repo_downloader(repo_dir, directory_path, destinarion_dir)
+
+	# print('\n---------------------\n')
+	# print('... Etapa 3 ...\n')
+	# erros_encontrados = extrator_funcao.erros_encontrados(error_directory=error_directory, file_directory=file_path)
+
+	# print('\n---------------------\n')
+	# print('... Etapa 4 ...\n')
+
+	print('... Etapa 1 ...\n')
+	crew_research_step = kickoff_builded_research_crew()
+	print('\n\n\n---------------------\n\n\n')
+	print('... Etapa 2 ...\n')
+	crew_repo_step = kickoff_builded_crew_repo(researcher_notes=crew_research_step) # retorna o arquivo completo
+	print('\n\n\n---------------------\n\n\n')
+	print('... Etapa 3 ...\n')
+	crew_identify_step = kickoff_builded_crew_identify(stack_trace=crew_research_step, full_code=crew_repo_step) # retorna uma análise do stackTrace
+	print('\n\n\n---------------------\n\n\n')
+	print('... Etapa 4 ...\n')
+	crew_suggest_step = kickoff_builded_crew_suggest(query_solution=crew_research_step,repository_solution=crew_repo_step)
+	print('\n\n\n---------------------\n\n\n')
+	print('... Etapa 5 ...\n')
+	crew_dev_step = kickoff_builded_crew_dev(stack_trace=crew_research_step, suggest_solution=crew_suggest_step, repository_solution=crew_repo_step)
+	print('\n\n\n---------------------\n\n\n')
+	print('... Etapa 6 ...\n')
+	qa_crew_step = kickoff_builded_crew_qa(query_solution=crew_research_step, repository_solution=crew_repo_step, dev_solution=crew_dev_step)
+
+	# qa_crew_step = kickoff_builded_crew_qa(query_solution="AbastecimentoListaItensAdapter removerCard", repository_solution="arquivo kotlin XYZ", dev_solution="arquivo kotlin XYZ_v2")
+	print('\n\n\n---------------------\n')
+	print('---------------------\n')
+	print('---------------------\n')
+
+	
+
+	# print_results(third_step)
+	# for i in erros_encontrados:
+		# iniciar_agentes(erro=i)
+	
+
+
+	print('\n---------------------\n')
+	print('Aplicação concluída...\n')
+  
+	pass
+
+
+

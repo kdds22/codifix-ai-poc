@@ -1,0 +1,461 @@
+Columns:
+
+- platform,
+- bundle_identifier,
+- event_id,
+- error_type,
+- issue_id,
+- issue_title,
+- issue_subtitle,
+- event_timestamp,
+- received_timestamp,
+- device,
+- memory,
+- storage,
+- operating_system,
+- application,
+- user,
+- custom_keys,
+- unity_metadata,
+- installation_uuid,
+- crashlytics_sdk_version,
+- app_orientation,
+- device_orientation,
+- process_state,
+- logs,
+- breadcrumbs,
+- blame_frame,
+- exceptions,
+- errors,
+- threads,
+- variant_id,
+- native_crash_info,
+- remote_config_feature_rollouts
+
+
+Example:
+
+- platform: 
+    ANDROID,
+- bundle_identifier: 
+    com.havan.app.abastecimento,
+- event_id: 
+    1957271220010431732,
+- error_type: 
+    NON_FATAL,
+- issue_id: 
+    10ace9c65438754b6b4d520acb5d0960,
+- issue_title: 
+    com.havan.readermanager.factory.impl.zebra.ZebraRFR8500.configurarBaseAntenaColetor,
+- issue_subtitle: 
+    com.zebra.rfid.api3.OperationFailureException,
+- event_timestamp: 
+    2024-06-10 10:51:57.000000 UTC,
+- received_timestamp: 
+    2024-06-10 10:58:59.000000 UTC,
+- device:
+    "{
+      ""device"": {
+        ""manufacturer"": ""samsung"",
+        ""model"": ""SM-J600GT"",
+        ""architecture"": ""ARMV7""
+      }
+    }",
+- memory:
+    "{
+      ""memory"": {
+        ""used"": ""1494941696"",
+        ""free"": ""397811712""
+      }
+    }"
+- storage:
+    "{
+      ""storage"": {
+        ""used"": ""3133620224"",
+        ""free"": ""22277939200""
+      }
+    }"
+- operating_system:
+    "{
+      ""operating_system"": {
+        ""display_version"": ""10"",
+        ""name"": ""10"",
+        ""modification_state"": ""UNMODIFIED"",
+        ""type"": """",
+        ""device_type"": ""MOBILE""
+      }
+    }"
+- application:
+    "{
+      ""application"": {
+        ""build_version"": ""358"",
+        ""display_version"": ""2.1.2-RC:358-144""
+      }
+    }"
+- user:
+    "{
+      ""user"": null
+    }"
+- custom_keys:"{
+    ""custom_keys"": [{
+        ""key"": ""filial"",
+        ""value"": ""null""
+      }, {
+        ""key"": ""hora"",
+        ""value"": ""1718016717053""
+      }, {
+        ""key"": ""usuario"",
+        ""value"": ""null""
+      }]
+    }"
+- unity_metadata:
+    "{
+      ""unity_metadata"": {
+        ""unity_version"": null,
+        ""debug_build"": null,
+        ""processor_type"": null,
+        ""processor_count"": null,
+        ""processor_frequency_mhz"": null,
+        ""system_memory_size_mb"": null,
+        ""graphics_memory_size_mb"": null,
+        ""graphics_device_id"": null,
+        ""graphics_device_vendor_id"": null,
+        ""graphics_device_name"": null,
+        ""graphics_device_vendor"": null,
+        ""graphics_device_version"": null,
+        ""graphics_device_type"": null,
+        ""graphics_shader_level"": null,
+        ""graphics_render_target_count"": null,
+        ""graphics_copy_texture_support"": null,
+        ""graphics_max_texture_size"": null,
+        ""screen_size_px"": null,
+        ""screen_refresh_rate_hz"": null,
+        ""screen_resolution_dpi"": null
+      }
+    }"
+- installation_uuid: 
+    AF823806FA2A3C95DC6CA451614CC209480A9D74EFB8D8BF8453E4740D13E22A
+- crashlytics_sdk_version: 
+    18.2.1,
+- app_orientation: 
+    PORTRAIT,
+- device_orientation: 
+    PORTRAIT,
+- process_state: 
+    FOREGROUND,
+- logs:
+    "{
+      ""logs"": [{
+        ""timestamp"": ""2024-06-10 09:09:03.790000 UTC"",
+        ""message"": ""Response from com.havan.app.abastecimento.data.service.IMovimentacaoService.ultimaMovimentacao was null but response body type was declared as non-null""
+      }, {
+        ""timestamp"": ""2024-06-10 09:19:45.368000 UTC"",
+        ""message"": ""Falha no override updateProduct""
+      }, {
+        ""timestamp"": ""2024-06-10 10:51:56.591000 UTC"",
+        ""message"": ""Falha em buscar itens""
+      }]
+    }",
+- breadcrumbs:
+    "{
+      ""breadcrumbs"": [{
+        ""timestamp"": ""2024-06-10 09:08:50.738000 UTC"",
+        ""name"": ""_s"",
+        ""params"": []
+      }, {
+        ""timestamp"": ""2024-06-10 09:08:50.791000 UTC"",
+        ""name"": ""_vs"",
+        ""params"": [{
+          ""key"": ""_sc"",
+          ""value"": ""MainActivity""
+        }]
+      }]
+    }"
+- blame_frame:
+    "{
+      ""blame_frame"": {
+        ""line"": ""588"",
+        ""file"": ""ZebraRFR8500.kt"",
+        ""symbol"": ""com.havan.readermanager.factory.impl.zebra.ZebraRFR8500.configurarBaseAntenaColetor"",
+        ""offset"": ""588"",
+        ""address"": null,
+        ""library"": ""com.havan.app.abastecimento"",
+        ""owner"": ""DEVELOPER"",
+        ""blamed"": ""true""
+      }
+    }",
+- exceptions:
+    "{
+      ""exceptions"": [{
+        ""type"": ""com.zebra.rfid.api3.OperationFailureException"",
+        ""exception_message"": null,
+        ""nested"": ""false"",
+        ""title"": ""Non-fatal Exception: com.zebra.rfid.api3.OperationFailureException"",
+        ""subtitle"": """",
+        ""blamed"": ""true"",
+        ""frames"": [{
+          ""line"": ""11"",
+          ""file"": null,
+          ""symbol"": ""com.zebra.rfid.api3.q1.a"",
+          ""offset"": ""11"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""THIRD_PARTY"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""23"",
+          ""file"": null,
+          ""symbol"": ""com.zebra.rfid.api3.Antennas$AntennaProperties.e"",
+          ""offset"": ""23"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""THIRD_PARTY"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""4"",
+          ""file"": null,
+          ""symbol"": ""com.zebra.rfid.api3.Antennas.getSingulationControl"",
+          ""offset"": ""4"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""THIRD_PARTY"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""588"",
+          ""file"": ""ZebraRFR8500.kt"",
+          ""symbol"": ""com.havan.readermanager.factory.impl.zebra.ZebraRFR8500.configurarBaseAntenaColetor"",
+          ""offset"": ""588"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""DEVELOPER"",
+          ""blamed"": ""true""
+        }, {
+          ""line"": ""281"",
+          ""file"": ""ZebraRFR8500.kt"",
+          ""symbol"": ""com.havan.readermanager.factory.impl.zebra.ZebraRFR8500.configurarReaderUHF"",
+          ""offset"": ""281"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""DEVELOPER"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""264"",
+          ""file"": ""ZebraRFR8500.kt"",
+          ""symbol"": ""com.havan.readermanager.factory.impl.zebra.ZebraRFR8500.onCreatedView"",
+          ""offset"": ""264"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""DEVELOPER"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""234"",
+          ""file"": ""AbastecimentoListaItensViewModel.kt"",
+          ""symbol"": ""com.havan.app.abastecimento.ui.abastecimento.listaItens.AbastecimentoListaItensViewModel$iniciarInstanciaDoReader$1.invokeSuspend"",
+          ""offset"": ""234"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""DEVELOPER"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""33"",
+          ""file"": ""ContinuationImpl.kt"",
+          ""symbol"": ""kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith"",
+          ""offset"": ""33"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""SYSTEM"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""106"",
+          ""file"": ""DispatchedTask.kt"",
+          ""symbol"": ""kotlinx.coroutines.DispatchedTask.run"",
+          ""offset"": ""106"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""SYSTEM"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""571"",
+          ""file"": ""CoroutineScheduler.kt"",
+          ""symbol"": ""kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely"",
+          ""offset"": ""571"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""SYSTEM"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""738"",
+          ""file"": ""CoroutineScheduler.kt"",
+          ""symbol"": ""kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask"",
+          ""offset"": ""738"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""SYSTEM"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""678"",
+          ""file"": ""CoroutineScheduler.kt"",
+          ""symbol"": ""kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker"",
+          ""offset"": ""678"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""SYSTEM"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""665"",
+          ""file"": ""CoroutineScheduler.kt"",
+          ""symbol"": ""kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run"",
+          ""offset"": ""665"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""SYSTEM"",
+          ""blamed"": ""false""
+        }]
+      }]
+    }",
+- errors:
+    "{
+      ""errors"": []
+    }",
+- threads:
+    "{
+      ""threads"": [{
+        ""crashed"": ""true"",
+        ""thread_name"": ""main"",
+        ""queue_name"": null,
+        ""signal_name"": """",
+        ""signal_code"": """",
+        ""crash_address"": ""0"",
+        ""title"": ""Crashed: main"",
+        ""subtitle"": """",
+        ""blamed"": ""false"",
+        ""frames"": [{
+          ""line"": ""11"",
+          ""file"": null,
+          ""symbol"": ""com.zebra.rfid.api3.q1.a"",
+          ""offset"": ""11"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""THIRD_PARTY"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""23"",
+          ""file"": null,
+          ""symbol"": ""com.zebra.rfid.api3.Antennas$AntennaProperties.e"",
+          ""offset"": ""23"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""THIRD_PARTY"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""4"",
+          ""file"": null,
+          ""symbol"": ""com.zebra.rfid.api3.Antennas.getSingulationControl"",
+          ""offset"": ""4"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""THIRD_PARTY"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""588"",
+          ""file"": ""ZebraRFR8500.kt"",
+          ""symbol"": ""com.havan.readermanager.factory.impl.zebra.ZebraRFR8500.configurarBaseAntenaColetor"",
+          ""offset"": ""588"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""DEVELOPER"",
+          ""blamed"": ""true""
+        }, {
+          ""line"": ""281"",
+          ""file"": ""ZebraRFR8500.kt"",
+          ""symbol"": ""com.havan.readermanager.factory.impl.zebra.ZebraRFR8500.configurarReaderUHF"",
+          ""offset"": ""281"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""DEVELOPER"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""264"",
+          ""file"": ""ZebraRFR8500.kt"",
+          ""symbol"": ""com.havan.readermanager.factory.impl.zebra.ZebraRFR8500.onCreatedView"",
+          ""offset"": ""264"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""DEVELOPER"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""234"",
+          ""file"": ""AbastecimentoListaItensViewModel.kt"",
+          ""symbol"": ""com.havan.app.abastecimento.ui.abastecimento.listaItens.AbastecimentoListaItensViewModel$iniciarInstanciaDoReader$1.invokeSuspend"",
+          ""offset"": ""234"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""DEVELOPER"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""33"",
+          ""file"": ""ContinuationImpl.kt"",
+          ""symbol"": ""kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith"",
+          ""offset"": ""33"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""SYSTEM"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""106"",
+          ""file"": ""DispatchedTask.kt"",
+          ""symbol"": ""kotlinx.coroutines.DispatchedTask.run"",
+          ""offset"": ""106"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""SYSTEM"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""571"",
+          ""file"": ""CoroutineScheduler.kt"",
+          ""symbol"": ""kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely"",
+          ""offset"": ""571"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""SYSTEM"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""738"",
+          ""file"": ""CoroutineScheduler.kt"",
+          ""symbol"": ""kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask"",
+          ""offset"": ""738"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""SYSTEM"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""678"",
+          ""file"": ""CoroutineScheduler.kt"",
+          ""symbol"": ""kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker"",
+          ""offset"": ""678"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""SYSTEM"",
+          ""blamed"": ""false""
+        }, {
+          ""line"": ""665"",
+          ""file"": ""CoroutineScheduler.kt"",
+          ""symbol"": ""kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run"",
+          ""offset"": ""665"",
+          ""address"": null,
+          ""library"": ""com.havan.app.abastecimento"",
+          ""owner"": ""SYSTEM"",
+          ""blamed"": ""false""
+        }]
+      }]
+    }",
+- variant_id: 
+    39d6fce838ca953e520ab99ee43081c9,
+- native_crash_info:
+    "{
+      ""native_crash_info"": null
+    }",
+- remote_config_feature_rollouts:
+    "{
+      ""remote_config_feature_rollouts"": []
+    }"
