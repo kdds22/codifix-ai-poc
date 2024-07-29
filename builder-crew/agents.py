@@ -5,18 +5,6 @@ from textwrap import dedent
 from crewai import Agent
 from langchain_openai import AzureChatOpenAI, ChatOpenAI
 
-# azure_llm = ChatOpenAI(
-# # 	model=os.environ.get("AZURE_OPENAI_DEPLOYMENT"),
-# # 	azure_endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT"),
-# # 	azure_ad_token=os.environ.get("AZURE_OPENAI_KEY"),
-# # 	#api_version=os.environ.get("AZURE_OPENAI_VERSION"),
-# # 	#base_url=os.environ.get("AZURE_OPENAI_ENDPOINT_BASE")
-# # )
-# 	# model ="phi-3-medium-128k-instruct-1",
-#    	base_url ="https://z-nkkdw.eastus2.inference.ml.azure.com/v1",
-# 	api_key="eyJhbGciOiJSUzI1NiIsImtpZCI6Ijk3QTcyRUQyOUNFMjMwMTQwQjVGNzFEOTkyODk2NzBDRDRGNEJFMzUiLCJ0eXAiOiJKV1QifQ.eyJjYW5SZWZyZXNoIjoiRmFsc2UiLCJ3b3Jrc3BhY2VJZCI6IjgwNTNlYWFkLTNiYmUtNDdhZC04M2FlLWJmNDc1MDdlMTlkYyIsInRpZCI6IjU0OTk4MDljLWVlYzAtNDkxZC04Y2VhLTQ2ZGM3ZTFmZmNmOCIsIm9pZCI6IjUxZjU5OWFkLTQ1ODEtNDE3Mi04NzBjLTIyMGRhZDdmYmVkZCIsImFjdGlvbnMiOiJbXCJNaWNyb3NvZnQuTWFjaGluZUxlYXJuaW5nU2VydmljZXMvd29ya3NwYWNlcy9vbmxpbmVFbmRwb2ludHMvc2NvcmUvYWN0aW9uXCJdIiwiZW5kcG9pbnROYW1lIjoiei1ua2tkdyIsInNlcnZpY2VJZCI6InotbmtrZHciLCJleHAiOjE3MTc2MTA2MTMsImlzcyI6ImF6dXJlbWwiLCJhdWQiOiJhenVyZW1sIn0.0YWV3j-to0Db3dzBpnNG0a9SyY7ozO6cQ6Arva1LwwbVZXePM_FNzCBZKfXMI5tkKLsKFiucopxvcphE2p1_kac7qIIjZ7ZOLtJN2LWR0vicNFSwi4EbuL0ym5SNgf0Xgx5ez0ap28FTs4OOB73n9sfxcnzb6xCeH1gwg7Kc_QHTF5Ks6xiGts7kATLdpAiplSzT-e5BOFNeJp-mV_mt6G6tjDs5tQi8eU3OhmBIyj194q8SgCTtIZ4uSjR8Ioepwslkf0XSPRqIhBLVRNjBhrJi_g2gTm_CV0eU9sF_bzO_JXE814OAj7yEm5LgqGI04L1Hl8ThxRGhcIQvIeDxew"
-# )
-
 
 class FirebaseErrorAgents():
 	def senior_research_agent(self):
@@ -31,7 +19,6 @@ class FirebaseErrorAgents():
 				Ensures that all operations are performed efficiently and accurately, 
 				maintaining the highest standards of data management."""),
 			allow_delegation=False,
-			# #llm=azure_llm,
 			verbose=True
 		)
 	
@@ -64,7 +51,6 @@ class FirebaseErrorAgents():
 				Your expertise in programming Kotlin code. Especially identifying 
 				possible causes of errors. and do your best to provide the best analysis."""),
 			allow_delegation=False,
-			# #llm=azure_llm,
 			verbose=True
 		)
 	
@@ -77,7 +63,6 @@ class FirebaseErrorAgents():
 				Your expertise in programming Kotlin code. Especially analyzing errors and 
 				suggesting solutions. and do your best to provide the best suggest."""),
 			allow_delegation=False,
-			#llm=azure_llm,
 			verbose=True
 		)
 	
@@ -92,7 +77,6 @@ class FirebaseErrorAgents():
 				Your expertise in programming in Kotlin. and do your best to
 				produce perfect code"""),
 			allow_delegation=False,
-			#llm=azure_llm,
 			verbose=True
 		)
 
@@ -108,7 +92,6 @@ class FirebaseErrorAgents():
 				brackets and syntax errors.
   			You also check for security vulnerabilities, and logic errors"""),
 			allow_delegation=False,
-			#llm=azure_llm,
 			verbose=True
 		)
 
@@ -120,7 +103,6 @@ class FirebaseErrorAgents():
 				You feel that programmers always do only half the job, so you are
 				super dedicate to make high quality code."""),
 			allow_delegation=False,
-			# #llm=azure_llm,
 			verbose=True
 		)
 	
@@ -134,6 +116,5 @@ class FirebaseErrorAgents():
 				You are a Microsoft Teams Agent. You are responsible for sending 
 				notifications to the microsoft teams channel."""),
 			allow_delegation=False,
-			# #llm=azure_llm,
 			verbose=True
 		)

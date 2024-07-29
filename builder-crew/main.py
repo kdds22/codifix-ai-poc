@@ -1,81 +1,25 @@
 
-import bigquery_script
-import repo_downloader
+
 import extrator_funcao
 import os
 from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()
 
-import webhook
 from typing import List
 
 from crewai import Crew
 from crewai_tools import DirectoryReadTool, \
                          FileReadTool
 
-directory_read_tool = DirectoryReadTool(directory='builder-crew/erros')
-directory_read_tool_kotlin = DirectoryReadTool(directory='builder-crew/kotlin-files')
+directory_read_tool = DirectoryReadTool(directory='running-crew/erros')
+directory_read_tool_kotlin = DirectoryReadTool(directory='running-crew/kotlin-files')
 file_read_tool = FileReadTool()
 
-from crewai_tools import BaseTool
 
-from pydantic import BaseModel
-
-class BigQueryError(BaseModel):
-	title: str
-	file: str
-	line: int
-	function: str
-	description: str
-	stack_trace: str
-
-class GitFileError(BaseModel):
-	full_kotlin_code: str
-
-class BigQueryResearchTool(BaseTool):
-    name: str ="Google BigQuery Research Tool"
-    description: str = ("Getting the error data of bigquery "
-         "to identify possible error causes.")
-    
-    def _run(self, text: str) -> str:
-        return bigquery_script.start_bigquery('builder-crew/erros')
+import models.custom_models as cm
 
 
-class GitSearchTool(BaseTool):
-	name: str="Git Helper Tool"
-	description: str = ("Getting the project files repository to "
-					 "to analyze the reported errors.")
-	
-	def _run(self, text: str) -> str:
-		return repo_downloader.start_repo_downloader("current_repo_temp",'builder-crew/erros',"builder-crew/kotlin-files")
-
-class SectionModel(BaseModel):
-	activityTitle: str
-	activitySubtitle: str
-
-class WebhookModel(BaseModel):
-	themeColor: str
-	summary: str
-	sections: List[SectionModel]
-
-class WebhookTool(BaseTool):
-    name: str ="Webhook Tool"
-    description: str = ("Sending a webhook to a specified channel "
-         "to notify about the error.")
-    
-    def _run(self, text: str) -> str:
-        webhook_model = WebhookModel(
-            themeColor="#0078D7",
-            summary="CodiFix - Sugestão ",
-            sections=[
-                SectionModel(
-                    activityTitle="Mensagem de Erro",
-                    activitySubtitle="CodiFix webhook XPTO",
-                ),
-            ],
-        )
-        return webhook.send_teams_by_model(webhook_model)
 
 
  # 0 = OFF, 1 = DEBUG, 2 = INFO
@@ -104,7 +48,7 @@ webhhok_agent = agents.microsoft_teams_agent()
 # Define Tasks
 research_solution = tasks.research_task(
 										agent=senior_research_agent, 
-										json_model=BigQueryError, 
+										json_model=cm.BigQueryError, 
 										tools_list=[directory_read_tool, file_read_tool, bigquery_research_tool]
 										)
 
@@ -121,7 +65,7 @@ def approve_solution(stack_trace, suggested_code):
 	return tasks.evaluate_task(agent=chief_qa_engineer_agent, stack_trace=stack_trace, suggested_code=suggested_code)
 
 def send_notification(notification_message):
-	return tasks.microsoft_teams_task(agent=webhhok_agent, json_model=WebhookModel, message=notification_message, webhook_tool=[webhhok_tool])
+	return tasks.microsoft_teams_task(agent=webhhok_agent, json_model=cm.WebhookModel, message=notification_message, webhook_tool=[webhhok_tool])
 
 
 # review_solution.context = [suggest_solution, code_solution]
@@ -153,14 +97,14 @@ def kickoff_builded_research_crew():
 def kickoff_builded_crew_repo(researcher_notes):
 	getting_files_solution = tasks.git_crawler_task(
 													agent=git_manager_agent, 
-													json_model=GitFileError, 
+													json_model=cm.GitFileError, 
 													researcher_notes=researcher_notes, 
 													tools_list=[git_search_tool]
 													)
 	
 	crawler_files_solution = tasks.git_crawler_task(
 													agent=git_manager_agent, 
-													json_model=GitFileError, 
+													json_model=cm.GitFileError, 
 													researcher_notes=researcher_notes, 
 													tools_list=[directory_read_tool_kotlin, file_read_tool]
 													)
@@ -257,37 +201,15 @@ def kickoff_builded_crew_qa(query_solution, repository_solution, dev_solution):
 	# print_results(solution=qa_solution)
 	return qa_solution
 
-def iniciar_agentes(erro):
-	print(erro)
-	for key in erro:
-		print(erro[key])
-	pass
-
 if __name__ == '__main__':
 
 	repo_dir = "current_repo_temp"
-	directory_path = 'builder-crew/erros'
+	directory_path = 'running-crew/erros'
 	error_directory = Path(directory_path)
-	destinarion_dir = "builder-crew/kotlin-files"
+	destinarion_dir = "running-crew/kotlin-files"
 	file_path = Path(destinarion_dir)
 
-	# print('\n---------------------\n')
 	print('Iniciando aplicação...\n')
-
-	# print('\n---------------------\n')
-	# print('... Etapa 1 ...\n')
-	# bigquery_script.start_bigquery(directory_path=directory_path)
-	
-	# print('\n---------------------\n')
-	# print('... Etapa 2 ...\n')
-	# repo_downloader.start_repo_downloader(repo_dir, directory_path, destinarion_dir)
-
-	# print('\n---------------------\n')
-	# print('... Etapa 3 ...\n')
-	# erros_encontrados = extrator_funcao.erros_encontrados(error_directory=error_directory, file_directory=file_path)
-
-	# print('\n---------------------\n')
-	# print('... Etapa 4 ...\n')
 
 	print('... Etapa 1 ...\n')
 	crew_research_step = kickoff_builded_research_crew()
@@ -307,19 +229,7 @@ if __name__ == '__main__':
 	print('... Etapa 6 ...\n')
 	qa_crew_step = kickoff_builded_crew_qa(query_solution=crew_research_step, repository_solution=crew_repo_step, dev_solution=crew_dev_step)
 
-	# qa_crew_step = kickoff_builded_crew_qa(query_solution="AbastecimentoListaItensAdapter removerCard", repository_solution="arquivo kotlin XYZ", dev_solution="arquivo kotlin XYZ_v2")
 	print('\n\n\n---------------------\n')
-	print('---------------------\n')
-	print('---------------------\n')
-
-	
-
-	# print_results(third_step)
-	# for i in erros_encontrados:
-		# iniciar_agentes(erro=i)
-	
-
-
 	print('\n---------------------\n')
 	print('Aplicação concluída...\n')
   
