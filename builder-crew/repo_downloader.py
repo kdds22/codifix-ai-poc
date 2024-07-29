@@ -45,4 +45,3 @@ def start_repo_downloader(repo_dir, error_folder_directory, destinarion_dir):
 if __name__ == "__main__":
     repo_dir = "current_repo_temp"
     start_repo_downloader(repo_dir=repo_dir)
-    pass

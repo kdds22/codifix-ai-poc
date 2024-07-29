@@ -5,6 +5,7 @@ from pathlib import Path
 from google.cloud import bigquery
 from datetime import datetime
 
+#TODO - Outro motivo para extrair (yaml?)
 ignore_files = ['KotlinExtensions.kt', 'CoroutineScheduler.kt', 'DispatchedTask.kt','DispositivoBluetooth.kt','ZebraRFR8500.kt','ContinuationImpl.kt', 'ReaderManager.kt']
 
 def mostrar_erros_por_tipo(path_folder):
@@ -14,7 +15,6 @@ def mostrar_erros_por_tipo(path_folder):
 
     try:
         for file_path in Path(path_folder).iterdir():
-            # print(f'File Path: {file_path}\n')
             if file_path.is_file() and file_path.suffix == '.json':
                 with file_path.open(mode='r', encoding='utf-8') as json_file:
                     file_name = file_path.name.split('.')[0]
@@ -27,7 +27,6 @@ def mostrar_erros_por_tipo(path_folder):
             erros_analisados.append('None')
 
 
-    # print(f"{','.join(f"'{issue_id}'" for issue_id in erros_analisados)}")
     final_result = []
     client = bigquery.Client()    
     query = f"""
@@ -92,7 +91,7 @@ def buscar_excecoes_por_issue_id(issue_id: str, path_folder, erros_analisados):
         AND issue_id = '{issue_id}' 
         
     """
-#--AND issue_id NOT IN ({','.join(f"'{issue_id}'" for issue_id in erros_analisados)})
+    
     query_job = client.query(query)
     results = query_job.result()
 
@@ -141,5 +140,4 @@ def buscar_excecoes_por_issue_id(issue_id: str, path_folder, erros_analisados):
 if __name__ == "__main__":
     path_folder = 'running-crew/erros'
     mostrar_erros_por_tipo(path_folder)
-    pass
 

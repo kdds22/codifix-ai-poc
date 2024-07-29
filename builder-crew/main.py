@@ -1,6 +1,5 @@
 
 
-import extrator_funcao
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -18,12 +17,13 @@ file_read_tool = FileReadTool()
 
 
 import models.custom_models as cm
+import tools.custom_tools as ct
 
 
 
 
  # 0 = OFF, 1 = DEBUG, 2 = INFO
-verbose_type = 1
+verbose_type = 1 #TODO - extrair .env
 
 from tasks import FirebaseErrorTasks
 from agents import FirebaseErrorAgents
@@ -31,9 +31,9 @@ from agents import FirebaseErrorAgents
 tasks = FirebaseErrorTasks()
 agents = FirebaseErrorAgents()
 
-bigquery_research_tool = BigQueryResearchTool()
-git_search_tool = GitSearchTool()
-webhhok_tool = WebhookTool()
+bigquery_research_tool = ct.BigQueryResearchTool()
+git_search_tool = ct.GitSearchTool()
+webhhok_tool = ct.WebhookTool()
 
 # Define Agents
 senior_research_agent = agents.senior_research_agent()
@@ -91,7 +91,6 @@ def kickoff_builded_research_crew():
 	)
 
 	researched_solution = crew.kickoff()
-	# print_results(solution=researched_solution)
 	return researched_solution
 
 def kickoff_builded_crew_repo(researcher_notes):
@@ -122,26 +121,21 @@ def kickoff_builded_crew_repo(researcher_notes):
 	)
 
 	repo_solution = crew_repo.kickoff()
-	# print_results(solution=repo_solution)
 	return repo_solution
 
 def kickoff_builded_crew_identify(stack_trace, full_code):
-	# identify_solution = tasks.identify_task(senior_analyst_identifier_agent, previous_solution)
 	suggest_solution_identified = tasks.suggest_task(senior_analyst_suggester_agent, stack_trace, full_code)
 	crew_identify_suggest = Crew(
 		agents=[
-			# senior_analyst_identifier_agent,
 			senior_analyst_suggester_agent,
 		],
 		tasks=[
-			# identify_solution,
 			suggest_solution_identified,			
 		],
 		verbose=verbose_type
 	)
 
 	suggest_identified_solution = crew_identify_suggest.kickoff()
-	# print_results(solution=suggest_identified_solution)
 	return suggest_identified_solution
 
 def kickoff_builded_crew_suggest(query_solution, repository_solution):
@@ -162,7 +156,6 @@ def kickoff_builded_crew_suggest(query_solution, repository_solution):
 	)
 
 	suggestion_solution = crew.kickoff()
-	# print_results(solution=suggestion_solution)
 	return suggestion_solution
 
 def kickoff_builded_crew_dev(stack_trace, suggest_solution, repository_solution):
@@ -178,7 +171,6 @@ def kickoff_builded_crew_dev(stack_trace, suggest_solution, repository_solution)
 	)
 
 	dev_solution = crew.kickoff()
-	# print_results(solution=dev_solution)
 	return dev_solution
 
 def kickoff_builded_crew_qa(query_solution, repository_solution, dev_solution):
@@ -186,19 +178,14 @@ def kickoff_builded_crew_qa(query_solution, repository_solution, dev_solution):
 	crew = Crew(
 		agents=[
 			qa_engineer_agent,
-			# chief_qa_engineer_agent,
-			# webhhok_agent
 		],
 		tasks=[
 			review_solution(original_code=repository_solution, suggested_code=dev_solution, stack_trace=query_solution),
-			# approve_solution(stack_trace=query_solution, suggested_code=dev_solution),
-			# send_notification(notification_message=f"O erro {query_solution} foi analisado!")
 		],
 		verbose=verbose_type
 	)
 
 	qa_solution = crew.kickoff()
-	# print_results(solution=qa_solution)
 	return qa_solution
 
 if __name__ == '__main__':

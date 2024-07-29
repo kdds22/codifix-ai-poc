@@ -15,7 +15,6 @@ def extract_kotlin_method(file_path, method_name):
     except Exception as e:
         return None
     
-    # pattern = rf"\b(?:public|private|protected)?\s*fun\s+{re.escape(method_name)}\s*\((.*?)\)\s*{{"
     pattern = rf"{re.escape(method_name)}"
     match = re.search(pattern, file_content, re.DOTALL)
     print(f'Match Pattern file content: {match}')
@@ -55,24 +54,12 @@ def extrair_metodo_com_erro_por_arquivo(file_directory, method_name):
 
 def extrair_metodo_do_symbol(symbols_finded_list: list[str]) -> list[str]:
     functions = []
-    # print(f'---------------------------------------->   Symbols List: {symbols_finded_list}\n')
     for symbols in symbols_finded_list:
-        # print(f'-------------------->   Symbols: {symbols}\n')
         parts = symbols.split('.')
-        # print(f'All Parts: {parts}\n')
-        # print(f'Function part: {parts[-1]}\n')
         functions.append(parts[-1])
-        # for symbol in symbols:
-        #     print(f'Symbol: {symbol}\n')
-        #     parts = symbol.split('.')
-        #     print(f'Parts: {parts}\n')
-        #     functions.append(parts[-1])
     result_functions = list(set(functions))
-    # print(f'All Functions: {result_functions}\n')
     return result_functions
 
-# Example usage
-# qualified_name = 'com.havan.app.abastecimento.data.adapter.abastecimento.AbastecimentoPedidoItemAdapter$ViewHolder.removerCardDaLista'
 
 
 def erros_encontrados(error_directory, file_directory):
@@ -81,25 +68,15 @@ def erros_encontrados(error_directory, file_directory):
     symbols_finded_list = []
     pattern = re.compile(r'^([\w.$]+)\.(\w+)$')
     for file_path in error_directory.iterdir():
-        # print(f'File Path: {file_path}\n')
         if file_path.is_file() and file_path.suffix == '.json':
             with file_path.open(mode='r', encoding='utf-8') as json_file:
                 content = json.load(json_file)
-                # print(f'Conteudo: {content}\n')
                 symbol_list = get_stack_trace.search_pattern_in_symbol(content, pattern, 'symbol')
                 symbol_list = list(set(symbol_list))
                 symbols_finded_list.extend(symbol_list)
-                # print(f'Symbol List: {symbol_list}\n')
-                # print(f'Symbols Finded List: {symbols_finded_list}\n')
     metodos = extrair_metodo_do_symbol(symbols_finded_list)
-    # # print(f'Métodos: {metodos}\n')
     for metodo in metodos:
-        # print(f'Método: {metodo}\n')
         erro_encontrado = extrair_metodo_com_erro_por_arquivo(file_directory, metodo)
-    #     if erro_encontrado != None:
-    #         print(f'Erro encontrado: {erro_encontrado}\n')
-    #         if erro_encontrado not in erros_encontrados:
-    #             erros_encontrados.append(erro_encontrado)
     print('Erros encontrados: ', erros_encontrados)
     return erros_encontrados
 

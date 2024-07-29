@@ -3,8 +3,6 @@ from dotenv import load_dotenv
 load_dotenv()
 from textwrap import dedent
 from crewai import Agent
-from langchain_openai import AzureChatOpenAI, ChatOpenAI
-
 
 class FirebaseErrorAgents():
 	def senior_research_agent(self):

@@ -1,36 +1,6 @@
+
 from textwrap import dedent
 from crewai import Task
-from pydantic import BaseModel
-from typing import List
-from crewai_tools import BaseTool
-import webhook
-
-class SectionModel(BaseModel):
-	activityTitle: str
-	activitySubtitle: str
-
-class WebhookModel(BaseModel):
-	themeColor: str
-	summary: str
-	sections: List[SectionModel]
-
-class WebhookTool(BaseTool):
-    name: str ="Webhook Tool"
-    description: str = ("Sending a webhook to a specified channel "
-         "to notify about the error.")
-    
-    def _run(self, text: str) -> str:
-        webhook_model = WebhookModel(
-            themeColor="#0078D7",
-            summary="CodiFix - Sugestão ",
-            sections=[
-                SectionModel(
-                    activityTitle="Mensagem de Erro",
-                    activitySubtitle="CodiFix webhook XPTO",
-                ),
-            ],
-        )
-        return webhook.send_teams_by_model(webhook_model)
 
 
 human_input_value = True
@@ -245,20 +215,6 @@ class FirebaseErrorTasks():
 		)
 	
 
-	# agent webhook microsoft teams
-	# this agent should send a notification to microsoft teams channel
-	# def microsoft_teams_agent(self):
-	# 	return Agent(
-	# 		role='Microsoft Teams Agent',
-	# 		goal='Send notification to microsoft teams channel',
-	# 		backstory=dedent("""\
-	# 			You are a Microsoft Teams Agent. You are responsible for sending 
-	# 			notifications to the microsoft teams channel."""),
-	# 		allow_delegation=False,
-	# 		# #llm=azure_llm,
-	# 		verbose=True
-	# 	)
-	# and your task should be:
 	def microsoft_teams_task(self, agent, json_model, message, webhook_tool):
 		return Task(
 			description=dedent(f"""\
