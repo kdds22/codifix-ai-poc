@@ -1,0 +1,192 @@
+config_env_task:
+  description: >
+    Your task is to configure the environment dynamically.
+    With help from your Dynamic Environment Key tool, you only need to use the tool and return the project id configured. 
+  expected_output: >
+    A expected output should be a project id configured correctly.
+
+research_task:
+  description: >
+    Your task is to analyze and identify the root cause of the firebase error. 
+    With help from your BigQuery tool, you only need to provide the 
+    error message and the relevant code snippet. 
+  expected_output: >
+    A expected output should be a report documenting the root cause of the firebase error
+
+git_repo_task:
+  description: >
+    Your task is to manage Git operations for a specific project. 
+    Begin by cloning the repository with tool. 
+
+    Instructions
+    ------------
+    1. Clone the repository
+    2. Save repository to a folder with a tool
+  expected_output: >
+    A cloned repository should be saved in a folder with a tool.
+
+git_file_task:
+  description: >
+    Your task is to manage Git operations for a specific project. Begin by cloning the repository with tool. 
+    After cloning, list all files in the repository and locate the ones previously identified by the Senior Software Researcher as containing errors. 
+    Open and confirm the contents of these files, preparing them for further analysis by subsequent agents in our workflow.
+
+    Senior Researcher Notes
+    -----------------------
+    "big_query_error": {researcher_notes}
+
+    Instructions
+    ------------
+    2. Locate and list the necessary files.
+    3. Review these files.
+    4. Your Final answer must be the entire code kotlin file, only the kotlin code and nothing else.
+    5. Don't change the Senior Research Notes in your final answer. 
+  expected_output: >
+    A entire reported code error kotlin file.
+
+identify_task:
+  description: >
+    You will receive some 'stacktraces' of a reported errors, 
+    and will analyze and identify possible Kotlin solutions for the error, these are the instructions:
+
+    Instructions
+    ------------
+    {researcher_notes}
+
+    Your final answer should be a full analyze about the reported errors, 
+    just a full analyze about the reported errors and nothing else.
+  expected_output: >
+    Analyze of the reported error in bullet point format, 
+    just the analyze of the reported error and nothing else.
+
+suggest_task:
+  description: >
+    You will receive some 'stacktraces' of a reported errors, 
+    and will suggest a possible Kotlin solutions for the errors, these are the instructions:
+
+    Begin Base Instructions
+          
+    --------------
+    Error Reported
+    --------------
+    {researcher_notes}
+
+    -------------
+    Original Code
+    -------------
+    {original_code}
+
+    -------------
+    End Base Instructions
+
+    Your final answer should be code suggestions in Kotlin as well as your explanations in comment format, 
+    just code suggestions in Kotlin as well as your explanations in comment format and nothing else.
+    All your suggestions will be in bullet points format.
+    All your comments explanations should be clear, concise and in brazilian portuguese. 
+  expected_output: >
+    Code suggestions to solve error, with explanations how you got to the suggested code in bullet points format.
+
+code_task:
+  description: >
+    You will receive code that has had a bug reported and with analysis done by the 
+    best software analyst on your team, you must implement the best solution to 
+    resolve the error using Kotlin, these are the instructions:
+
+    Instructions
+    ------------
+    Guardrails:
+    - Do not change the type of the objects
+    - If to change the type is necessary, create a comment above line as needed
+    - Don't ident any original line, only ident the new lines added to resolve the error.
+    - Don't change the order of the code, only add new code to resolve the error.
+    ------------
+                
+    Error Reported:
+          
+    {researcher_notes}
+    ------------
+
+    AI Agent Suggest: 
+      
+    {ai_suggest}
+    ------------
+
+    Original Code:
+
+    {original_code}
+    ------------
+
+    Your Final answer must be the full kotlin code, only the koltin code and nothing else.
+    All your comments explanations should be clear, concise and in brazilian portuguese.
+  expected_output: >
+    Original code kotlin with the solution implemented.
+
+review_task:
+  description: >
+    You are helping to implement code to resolve the reported error using Kotlin, these are the instructions::
+
+			Instructions
+			------------
+			Error Reported:
+					 
+			{researcher_notes}
+			------------
+								 
+			Original Code:
+			
+			{original_code}
+			------------
+
+			AI Agent Suggested Code:
+
+			{final_ai_suggest}
+			------------
+
+			Using the code you got, check for errors. Check for logic errors,
+			syntax errors, missing imports, variable declarations, mismatched brackets,
+			and security vulnerabilities.
+
+			Your Final answer must be the full kotlin code, only the kotlin code and nothing else.
+			All your comments explanations should be clear, concise and in brazilian portuguese.
+  expected_output: >
+    Full code kotlin file with the bug solved and 
+    comments of it explanations in bullet point format 
+    at the start of kotlin file.
+
+evaluate_task:
+  description: >
+    You are helping to implement code to resolve the reported error using Kotlin, these are the instructions::
+
+    Instructions
+    ------------
+    Error Reported:
+    
+    {researcher_notes}
+    ------------
+
+    Suggested Code to solve error:
+    {review_final_ai_suggest}
+    ------------
+
+    You will look over the code to insure that it is complete and
+    does the job that it is supposed to do.
+
+
+    All your comments explanations should be clear, concise and in brazilian portuguese.
+    If doesn't have anything to change in the Suggested Code, so your final answer is the full Suggest Code.
+    Your Final answer must be the full kotlin code, only the kotlin code and nothing else.
+  expected_output: >
+    Full code kotlin file with the bug solved and 
+    comments of it explanations in bullet point format at 
+    the start of kotlin file.
+  
+microsoft_teams_task:
+  description: >
+    Your task is to send a notification to the microsoft teams channel. 
+    You will send the following message:
+
+    {message}
+
+    Your final answer should be the message sent to the microsoft teams channel.
+  expected_output: >
+    Message sent to microsoft teams channel: {message}
