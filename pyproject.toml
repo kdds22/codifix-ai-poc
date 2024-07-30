@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "codifix_ai"
+name = "fix_ai_code"
 version = "0.1.0"
 description = ""
 authors = ["Klaus Dellano <klaus.dias@havan.com.br>"]
@@ -10,7 +10,7 @@ crewai = {extras = ["tools"], version = "^0.28.8"}
 python-dotenv = "1.0.0"
 
 [tool.poetry.scripts]
-codifix_ai = "codifix_ai.main:run"
+fix_ai_code = "codifix_ai.main:run"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
