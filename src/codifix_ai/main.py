@@ -26,10 +26,10 @@ from .tools import custom_tools as ct
 verbose_type = 1 #TODO - extrair .env
 
 from .tasks import FirebaseErrorTasks
-from .agents import FirebaseErrorAgents
+from .agents import CrewAgents
 
 tasks = FirebaseErrorTasks()
-agents = FirebaseErrorAgents()
+agents = CrewAgents()
 
 bigquery_research_tool = ct.BigQueryResearchTool()
 git_search_tool = ct.GitSearchTool()

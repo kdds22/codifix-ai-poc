@@ -5,7 +5,7 @@ description = ""
 authors = ["Klaus Dellano <klaus.dias@havan.com.br>"]
 
 [tool.poetry.dependencies]
-python = ">=3.10.0,<3.12"
+python = ">=3.10.0,<3.13"
 crewai = {extras = ["tools"], version = "^0.28.8"}
 python-dotenv = "1.0.0"
 
